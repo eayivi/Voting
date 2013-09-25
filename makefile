@@ -1,55 +1,55 @@
 all:
-	make Collatz.zip
+	make Voting.zip
 
 clean:
-	rm -f Collatz.log
-	rm -f Collatz.zip
-	rm -f RunCollatz
-	rm -f RunCollatz.out
-	rm -f RunCollatz.tmp
-	rm -f TestCollatz
-	rm -f TestCollatz.out
+	rm -f Voting.log
+	rm -f Voting.zip
+	rm -f RunVoting
+	rm -f RunVoting.out
+	rm -f RunVoting.tmp
+	rm -f TestVoting
+	rm -f TestVoting.out
 
-diff: RunCollatz RunCollatz.in RunCollatz.out
-	RunCollatz < RunCollatz.in > RunCollatz.tmp
-	diff RunCollatz.out RunCollatz.tmp
-	rm RunCollatz.tmp
+diff: RunVoting RunVoting.in RunVoting.out
+	RunVoting < RunVoting.in > RunVoting.tmp
+	diff RunVoting.out RunVoting.tmp
+	rm RunVoting.tmp
 
-doc: Collatz.c++
+doc: Voting.c++
 	doxygen Doxyfile
 
 turnin-list:
-	turnin --list hchuying cs371ppj1
+	turnin --list aizhuli cs371ppj2
 
-turnin-submit: Collatz.zip
-	turnin --submit hchuying cs371ppj1 Collatz.zip
+turnin-submit: Voting.zip
+	turnin --submit aizhuli cs371ppj2 Voting.zip
 
 turnin-verify:
-	turnin --verify hchuying cs371ppj1
+	turnin --verify aizhuli cs371ppj2
 
-Collatz.log:
-	git log > Collatz.log
+Voting.log:
+	git log > Voting.log
 
-Collatz.zip: makefile                                    \
-             Collatz.c++ Collatz.h Collatz.log           \
-             RunCollatz.c++ RunCollatz.in RunCollatz.out \
-             SphereCollatz.c++                           \
-             TestCollatz.c++ TestCollatz.out
-	zip -r Collatz.zip                                 \
-	       makefile html/                              \
-           Collatz.c++ Collatz.h Collatz.log           \
-           RunCollatz.c++ RunCollatz.in RunCollatz.out \
-           SphereCollatz.c++                           \
-           TestCollatz.c++ TestCollatz.out
+Voting.zip: makefile                                  \
+             Voting.c++ Voting.h Voting.log           \
+             RunVoting.c++ RunVoting.in RunVoting.out \
+             UVaVoting.c++                            \
+             TestVoting.c++ TestVoting.out
+	zip -r Voting.zip                               \
+	       makefile html/                           \
+           Voting.c++ Voting.h Voting.log           \
+           RunVoting.c++ RunVoting.in RunVoting.out \
+           UVaVoting.c++                            \
+           TestVoting.c++ TestVoting.out
 
-RunCollatz: Collatz.h Collatz.c++ RunCollatz.c++
-	g++ -pedantic -std=c++0x -Wall Collatz.c++ RunCollatz.c++ -o RunCollatz
+RunVoting: Voting.h Voting.c++ RunVoting.c++
+	g++ -pedantic -std=c++0x -Wall Voting.c++ RunVoting.c++ -o RunVoting
 
-RunCollatz.out: RunCollatz RunCollatz.in
-	valgrind RunCollatz < RunCollatz.in > RunCollatz.out
+RunVoting.out: RunVoting RunVoting.in
+	valgrind RunVoting < RunVoting.in > RunVoting.out
 
-TestCollatz: Collatz.h Collatz.c++ TestCollatz.c++
-	g++ -pedantic -std=c++0x -Wall Collatz.c++ TestCollatz.c++ -o TestCollatz -lgtest -lpthread -lgtest_main
+TestVoting: Voting.h Voting.c++ TestVoting.c++
+	g++ -pedantic -std=c++0x -Wall Voting.c++ TestVoting.c++ -o TestVoting -lgtest -lpthread -lgtest_main
 
-TestCollatz.out: TestCollatz
-	valgrind TestCollatz > TestCollatz.out
+TestVoting.out: TestVoting
+	valgrind TestVoting > TestVoting.out
