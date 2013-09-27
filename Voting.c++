@@ -29,21 +29,22 @@ bool voting_readcount(std::istream& r_cnt, int& elections_cnt) {
 
 bool voting_read(std::istream& r, int& elections_cnt, int& voters_cnt, int& can_cnt, string names[], vector<deque<int>>& ballots) {
     
-    r >> elections_cnt;
+    //r >> elections_cnt;
     r >> can_cnt;
     getline(r, names[0]);
     for (int i = 0; i < can_cnt; i++) {
  		getline(r, names[i]);
  		//cout << "candidate name is: " << names[i] << endl;
     }
-    
+	//cout << endl << "cancidates are: " << endl;
+	//voting_print(names, can_cnt);  
   	string next;
   	int rowindex = 0;
-  	
     while (getline(r, next)) {
     	//cout << "vote preference: " << next << endl;
-    	std::istringstream readvote(next);	
-    	
+    	if (next.empty()) break;
+		std::istringstream readvote(next);	
+		    	
     	int p;
     	int columnindex = 0;
     	//deque<int> vote;
@@ -54,9 +55,11 @@ bool voting_read(std::istream& r, int& elections_cnt, int& voters_cnt, int& can_
     	}	
 		rowindex++;
     }
-    
+    //cout << "ballots are: " << endl;
+	//voting_print2d(ballots);
 	voters_cnt = rowindex;
 	ballots.resize(voters_cnt);
+	//cout << endl << "Reading of election " << elections_cnt << " done successfully" << endl;
 	return true;
 }
 
@@ -68,30 +71,34 @@ void voting_print( string ar[], int len) {
 }
 void voting_print2d(vector<deque<int>>& ballots)  {
 	
-	//cout << "ballots.size:" << ballots.size();
+	cout << "ballots.size:" << ballots.size() << endl;
 	vector< deque<int> >::iterator it1;
 	deque<int>::iterator it2;
 	
 	for (it1 = ballots.begin(); it1 != ballots.end(); ++it1 ) {
 
 		for (it2 = it1->begin(); it2 != it1->end(); ++it2) {
-			cout << *it2 << " ";
+			cout << *it2 << "|";
 		}
 		cout << endl;
 	}
 }
 
 void check_winner(vector<deque<int>>& ballots, int candidate_votes [], int& voters_cnt, int& can_cnt, string names[] ) {
-
+	
+	//cout << endl << "Entering Check Winner " << endl;
 	bool tie = false;
 	bool winner = false;
 	int majority_winning = voters_cnt /2;
+	//cout << endl << "There are " << voters_cnt << " voters";
 	
 	std::set<int> list_of_losers;
 	//a negative vote count means a candidate's votes have been distributed, because he was a loser	
 
 	//cout << endl << "The candidate selected are: " ;
 	for (int i = 0; i < voters_cnt; i++) {						// looking through a round
+		
+		//cout << endl << "Looking through round " << endl;
 		int candidate_selected  = ballots[i].at(0);
 		//cout << candidate_selected << " ";
 		candidate_votes[candidate_selected - 1]++;

@@ -26,7 +26,6 @@ void voting_print(string[], int);
 void voting_print2d(vector<deque<int>>& ballots);
 
 void check_winner (vector<deque<int>>& ballots, int[], int&, int&, string[]);
-int main();
 
 
 
