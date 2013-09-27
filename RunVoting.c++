@@ -30,7 +30,13 @@ int main() {
 	
     //string ex = "1\n\n3\nJohn Doe\nJane Smith\nSirhan Sirhan\n1 2 3\n2 1 3\n2 3 1\n1 2 3\n1 3 2\n";
     
-    string ex = "1\n\n3\nJohn Doe\nJane Smith\nSirhan Sirhan\n1 2 3\n2 1 3\n2 3 1\n1 2 3\n2 3 1\n";
+    //string ex = "1\n\n3\nJohn Doe\nJane Smith\nSirhan Sirhan\n1 2 3\n2 1 3\n2 3 1\n1 2 3\n2 3 1\n";
+	
+    //string ex = "1\n\n3\nJohn Doe\nJane Smith\nSirhan Sirhan\n3 2 1\n3 1 2\n3 2 1\n1 2 3\n2 1 3\n2 3 1\n1 2 3\n2 3 1\n1 2 3\n"; //should be a tie
+
+	string ex = "1\n\n3\nJohn Doe\nJane Smith\nSirhan Sirhan\n3 2 1\n3 1 2\n1 2 3\n1 2 3\n2 3 1\n1 2 3\n2 3 1\n1 2 3\n"; //should be a loser: john doe
+
+	
 	std::istringstream r(ex);
 
     int elections_cnt = 0;	// number of elections
