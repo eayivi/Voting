@@ -22,14 +22,14 @@ using namespace std;
 //int candidate_cnt = 20; // revert
 
 
-bool voting_readcount(std::istream& r_cnt, int& total_cnt) {
-    r_cnt >> total_cnt;
+bool voting_readcount(std::istream& r_cnt, int& elections_cnt) {
+    r_cnt >> elections_cnt;
     return true;
 }
 
-bool voting_read(std::istream& r, int& total_cnt, int& can_cnt, string names[], vector<deque<int>>& ballots) {
+bool voting_read(std::istream& r, int& elections_cnt, int& voters_cnt, int& can_cnt, string names[], vector<deque<int>>& ballots) {
     
-    r >> total_cnt;
+    r >> elections_cnt;
     r >> can_cnt;
     getline(r, names[0]);
     for (int i = 0; i < can_cnt; i++) {
@@ -41,7 +41,7 @@ bool voting_read(std::istream& r, int& total_cnt, int& can_cnt, string names[], 
   	int rowindex = 0;
   	
     while (getline(r, next)) {
-    	cout << "vote preference: " << next << endl;
+    	//cout << "vote preference: " << next << endl;
     	std::istringstream readvote(next);	
     	
     	int p;
@@ -49,18 +49,15 @@ bool voting_read(std::istream& r, int& total_cnt, int& can_cnt, string names[], 
     	//deque<int> vote;
     	while (readvote >> p) {
     		
-    		//int pref;
-    		//readvote >> pref;	
-    		cout << "single vote preference: " << p << endl;				
     		ballots[rowindex].push_back(p);
-    		//vote.push_back(p);	
-    		cout << "ballot vote: " << ballots[rowindex][columnindex] << endl;	
  			columnindex++;   		
     	}	
-    	//ballots.push_back(vote);
 		rowindex++;
     }
-    return true;
+    
+	voters_cnt = rowindex;
+	ballots.resize(voters_cnt);
+	return true;
 }
 
 
@@ -71,6 +68,7 @@ void voting_print( string ar[], int len) {
 }
 void voting_print2d(vector<deque<int>>& ballots)  {
 	
+	//cout << "ballots.size:" << ballots.size();
 	vector< deque<int> >::iterator it1;
 	deque<int>::iterator it2;
 	
@@ -79,14 +77,64 @@ void voting_print2d(vector<deque<int>>& ballots)  {
 		for (it2 = it1->begin(); it2 != it1->end(); ++it2) {
 			cout << *it2 << " ";
 		}
-		cout <<endl;
+		cout << endl;
 	}
 }
-/*
-int check_winner(int[] score) {
-	return (0);
+
+void check_winner(vector<deque<int>>& ballots, int candidate_votes [], int& voters_cnt, int& can_cnt, string names[] ) {
+
+	bool tie = false;
+	bool possible_tie = true;
+	bool winner = false;
+	int candidate_selected;
+	int majority_winning = voters_cnt /2;
+	
+	int max_vote;
+	int min_vote;	
+	//a negative vote count means a candidate's votes have been distributed, because he was a loser	
+
+	//cout << endl << "The candidate selected are: " ;
+	for (int i = 0; i < voters_cnt; i++) {
+		int candidate_selected  = ballots[i].at(0);
+		//cout << candidate_selected << " ";
+		candidate_votes[candidate_selected - 1]++;
+		
+	}
+	
+	while ( (tie== false) && (winner == false) ) {  // There is no winner or tie so far
+		
+		int max_vote = 0;
+		int min_vote = 0;
+		for (int i = 0; i < can_cnt; i++ ) {			// looking at each candidate's vote
+			
+			if (candidate_votes[i] > majority_winning) { 		// A candidate has well over half the votes
+				winner = true;
+				cout << names[i] << endl;
+				break;
+			}
+
+			if (candidate_votes[i] > max_vote) {
+				max_vote = candidate_votes[i];
+			} else if (min_vote > candidate_votes[i] && candidate_votes[i] >=0 )  {		//negative votes count see cmt above
+				min_vote = candidate_votes[i];
+			}
+			
+		}
+		
+		if (min_vote == max_vote) {
+			tie = true;
+		}
+	}
+	
+	for (int i = 0; i < can_cnt ; i++) {
+		
+		if (candidate_votes[i] == max_vote) {
+			cout << names[i] << endl;
+		}
+		
+	}
+
 }
-*/
 /*
 void voting_solve(istream& r, ostream& o) {
 	
