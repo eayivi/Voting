@@ -84,16 +84,14 @@ void voting_print2d(vector<deque<int>>& ballots)  {
 void check_winner(vector<deque<int>>& ballots, int candidate_votes [], int& voters_cnt, int& can_cnt, string names[] ) {
 
 	bool tie = false;
-	bool possible_tie = true;
 	bool winner = false;
-	int candidate_selected;
 	int majority_winning = voters_cnt /2;
 	
 	std::set<int> list_of_losers;
-//a negative vote count means a candidate's votes have been distributed, because he was a loser	
+	//a negative vote count means a candidate's votes have been distributed, because he was a loser	
 
 	//cout << endl << "The candidate selected are: " ;
-	for (int i = 0; i < voters_cnt; i++) {
+	for (int i = 0; i < voters_cnt; i++) {						// looking through a round
 		int candidate_selected  = ballots[i].at(0);
 		//cout << candidate_selected << " ";
 		candidate_votes[candidate_selected - 1]++;
@@ -101,8 +99,9 @@ void check_winner(vector<deque<int>>& ballots, int candidate_votes [], int& vote
 	}
 	int max_vote = candidate_votes[0];
 	int min_vote = candidate_votes[0];	
-		
+	
 	while ( (tie== false) && (winner == false) ) {  // There is no winner or tie so far
+		
 		
 		for (int i = 0; i < can_cnt; i++ ) {			// looking at each candidate's vote
 			
@@ -121,10 +120,8 @@ void check_winner(vector<deque<int>>& ballots, int candidate_votes [], int& vote
 				}
 				
 				list_of_losers.insert(i);
-
 				min_vote = candidate_votes[i];
 			}
-			
 		}
 		
 		if (min_vote == max_vote) {			// this indicates a tie
@@ -133,25 +130,27 @@ void check_winner(vector<deque<int>>& ballots, int candidate_votes [], int& vote
 			break;				
 		}
 
-		// No tie and no clear winner, redistributin the vote of the loser
+		 //No tie and no clear winner, redistributin the vote of the loser
 		
-		//for (set<int>::iterator it = list_of_losers.begin(); it != list_of_losers.end(); it++) {
-   		//	cout << "losers: " << *it;
-		//}
+		for (set<int>::iterator it = list_of_losers.begin(); it != list_of_losers.end(); it++) {
+   			//cout << "losers: " << *it;
+			candidate_votes[(*it)-1]= -1;		//set the vote count of a losing candidate to -1 to spot a loser
+		}
 		for (int i = 0; i < voters_cnt; i++) {
-				//cout << "reallocating ballots, i is " << i << endl;
+				//cout << " reallocating ballots, i is " << i << endl;
 				int current_vote = ballots[i].at(0);
 				//cout << endl << "current vote is " << current_vote;
-				if (list_of_losers.find(current_vote - 1) != list_of_losers.end()) {// if the candidate voted for is in losing set
+				while (list_of_losers.find(current_vote - 1) != list_of_losers.end()) {// if the candidate voted for is in losing set
 					//cout << endl << "voter " << i << "'s " << "first choice will be eliminated, i.e. value: "; 
 					//cout << ballots[i].front();
 					ballots[i].pop_front();
-					//cout << endl << "gone";
+					current_vote = ballots[i].at(0);
 				}
+				candidate_votes[current_vote -1]++;
 		}
-		//cout << "the loser is " << 
 		//cout << "New content is: " << endl;
-	
+		// Printing content of remaining ballots
+		/*    
 		vector< deque<int> >::iterator it1;
 		deque<int>::iterator it2;
 	
@@ -159,10 +158,12 @@ void check_winner(vector<deque<int>>& ballots, int candidate_votes [], int& vote
 
 			for (it2 = it1->begin(); it2 != it1->end(); ++it2) {
 				cout << *it2 << " ";
+				//cout << endl << "wait" << endl;
 			}
 			cout << endl;
-		}	
-		break;	
+		}
+		*/	
+		min_vote = max_vote;
 	}
 	
 	for (int i = 0; i < can_cnt ; i++) {
