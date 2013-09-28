@@ -82,12 +82,72 @@ TEST(Voting, read_2) {
 
 
 TEST(Voting, solve_0) {
-    std::istringstream r("1\n\n3\nJohn Smith\nJane Doe\nJack Shepard\n1 2 3\n1 2 3\n1 3 2\n1 2 3\n1 3 2\n1 2 3\n");
-    std::ostringstream w;
+    istringstream r("1\n\n3\nJohn Smith\nJane Doe\nJack Shepard\n1 2 3\n1 2 3\n1 3 2\n1 2 3\n1 3 2\n1 2 3\n");
+    ostringstream w;
 
     voting_solve(r, w);
-
     ASSERT_TRUE(w.str() == "John Smith\n");  
+}
+
+TEST(Voting, solve_1) {
+    istringstream r("1\n\n3\nJohn Smith\nJane Doe\nJack Shepard\n2 1 3\n1 2 3\n1 3 2\n1 2 3\n1 3 2\n1 2 3\n");
+    ostringstream w;
+
+    voting_solve(r,w);
+
+ASSERT_TRUE(w.str() == "John Smith\n");  
+}
+TEST(Voting, solve_2) {
+    istringstream r("1\n\n3\nJohn Smith\nJane Doe\nJack Shepard\n1 2 3\n1 2 3\n1 3 2\n1 2 3\n1 3 2\n1 2 3\n");
+    ostringstream w;
+    voting_solve(r,w);
+    ASSERT_TRUE(w.str() == "John Smith\n");  
+}
+
+TEST(Voting, solve_3)
+{
+    istringstream r("1\n\n1\na\n1\n");
+    ostringstream w;
+    voting_solve(r, w);
+    ASSERT_TRUE(w.str() == "a\n");
+}
+
+
+TEST(Voting, solve_4)
+{
+    istringstream r("1\n\n2\na\nb\n1 2\n2 1\n");
+    ostringstream w;
+    voting_solve(r, w);
+    ASSERT_TRUE(w.str() == "a\nb\n");
+}
+
+TEST(Voting, solve_5)
+{
+    istringstream r("2\n\n1\na\n1\n\n2\na\nb\n1 2\n2 1\n");
+    ostringstream w;
+    voting_solve(r, w);
+    ASSERT_TRUE(w.str() == "a\n\na\nb\n");
+}
+
+TEST(Voting, voting_solve_normal) {
+    istringstream r("1\n\n3\nJohn Doe\nJane Smith\nSirhan Sirhan\n1 2 3\n1 2 3\n1 2 3\n1 2 3\n3 1 2\n");
+    ostringstream w;
+    voting_solve(r, w);
+    ASSERT_TRUE(w.str() == "John Doe\n");
+}
+
+TEST(Voting, voting_solve_tie) {
+    istringstream r("1\n\n3\nJohn Doe\nJane Smith\nSirhan Sirhan\n1 2 3\n1 2 3\n2 1 3\n2 1 3\n3 1 2\n3 2 1\n");
+    ostringstream w;
+    voting_solve(r, w);
+    ASSERT_TRUE(w.str() == "John Doe\nJane Smith\nSirhan Sirhan\n");
+}
+
+TEST(Voting, voting_solve_recount) {
+    istringstream r("1\n\n3\nJohn Doe\nJane Smith\nSirhan Sirhan\n1 2 3\n2 1 3\n2 3 1\n1 2 3\n3 1 2\n");
+    ostringstream w;
+    voting_solve(r, w);
+    ASSERT_TRUE(w.str() == "John Doe\n");
 }
 
 
