@@ -46,7 +46,7 @@ int main() {
 	int candidate_votes[20] = {0}; 
 	int voters_cnt = 0;		// Number of voters (i.e. number of lines of votes)	
 
-    vector<deque<int>> ballots(20);
+    vector<deque<int>> ballots(1000);
     //voting_readcount(cin, elections_cnt);
 	
 	cin >> elections_cnt;
@@ -62,7 +62,7 @@ int main() {
 		voters_cnt =0;
 		can_cnt = 0;
 		ballots.clear();
-		ballots.resize(20);
+		ballots.resize(1000);
 		if (elections_cnt != 0) cout << endl;
 	} 
     //cout << elections_cnt << endl;

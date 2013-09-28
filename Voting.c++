@@ -90,7 +90,7 @@ void check_winner(vector<deque<int>>& ballots, int candidate_votes [], int& vote
 	bool tie = false;
 	bool winner = false;
 	int majority_winning = voters_cnt /2;
-	//cout << endl << "There are " << voters_cnt << " voters";
+	cout << endl << "There are " << voters_cnt << " voters";
 	
 	std::set<int> list_of_losers;
 	//a negative vote count means a candidate's votes have been distributed, because he was a loser	
@@ -98,12 +98,14 @@ void check_winner(vector<deque<int>>& ballots, int candidate_votes [], int& vote
 	//cout << endl << "The candidate selected are: " ;
 	for (int i = 0; i < voters_cnt; i++) {						// looking through a round
 		
-		//cout << endl << "Looking through round " << endl;
+		cout << endl << "Looking through round  for voter" << i << endl;
 		int candidate_selected  = ballots[i].at(0);
 		//cout << candidate_selected << " ";
+		cout << "They selected candidate " << candidate_selected << endl;
 		candidate_votes[candidate_selected - 1]++;
-		
+		cout << "There are " << voters_cnt << " voters";
 	}
+	cout << "after round check";
 	int max_vote = candidate_votes[0];
 	int min_vote = candidate_votes[0];	
 	
