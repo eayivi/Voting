@@ -15,13 +15,9 @@ To run the program:
     #define NDEBUG
 #endif
 
-// includes
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <algorithm>
+#include <iostream> // cin, cout, ios_base
 #include "Voting.h"
-
+/*
 // main
 int main() {
     using namespace std;
@@ -51,18 +47,19 @@ int main() {
 	
 	cin >> elections_cnt;
 	//cout << elections_cnt; 
-	while (elections_cnt > 0) {
+    int in = 0;
+	while (in < elections_cnt) {
 		//cout << " election " << elections_cnt << endl;
 		voting_read(cin, elections_cnt, voters_cnt, can_cnt, names, ballots);
 		check_winner(ballots, candidate_votes, voters_cnt, can_cnt, names ); 
 		
 		// Reset variables for a new election
-		elections_cnt--;
 		std::fill_n(candidate_votes, 20,0);	//reinitialize list of candidates
 		voters_cnt =0;
 		can_cnt = 0;
 		ballots.clear();
 		ballots.resize(1000);
+		in++;
 		if (elections_cnt != 0) cout << endl;
 	} 
     //cout << elections_cnt << endl;
@@ -70,5 +67,10 @@ int main() {
 	//voting_print(names, can_cnt);
 	//voting_print2d(ballots);
 	
-    return (0);
-}
+    return (0);*/
+
+    int main () {
+    using namespace std;
+    ios_base::sync_with_stdio(false); // turn off synchronization with C I/O
+    voting_solve(cin, cout);
+    return 0;}
