@@ -79,21 +79,21 @@ void addVote(int& vote_cnt, int candidate_votes [], vector<deque<int> > ballots)
 	}
 }
 
-bool check_majority(const vector<deque<int> >& ballots, int candidate_votes [], int can_cnt, int vote_cnt) {
+// bool check_majority(const vector<deque<int> >& ballots, int candidate_votes [], int can_cnt, int vote_cnt) {
 
-	int winner_index = -1;
-	for (int i = 0; i < can_cnt; i++) {
-		int can_score = candidate_votes[i];
-		if (can_score > can_cnt / 2) {
-			winner_index = i; 
-			break;
-		}
-	}
-	if (winner_index >= 0)
-		return true;
-	else 
-		return false;
-}
+// 	int winner_index = -1;
+// 	for (int i = 0; i < can_cnt; i++) {
+// 		int can_score = candidate_votes[i];
+// 		if (can_score > can_cnt / 2) {
+// 			winner_index = i; 
+// 			break;
+// 		}
+// 	}
+// 	if (winner_index >= 0)
+// 		return true;
+// 	else 
+// 		return false;
+// }
 
 //void add_loser()
 
