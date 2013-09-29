@@ -19,13 +19,6 @@
 
 using namespace std;
 
-//int candidate_cnt;
-//int score_card[20]; 
-
-bool voting_readcount(std::istream& r_cnt, int& elections_cnt) {
-    r_cnt >> elections_cnt;
-    return true;
-}
 
 bool voting_read(std::istream& r, int& voters_cnt, int& can_cnt, string names[], vector<deque<int> >& ballots) {
     
@@ -111,18 +104,23 @@ bool check_majority(const vector<deque<int> >& ballots, int candidate_votes [], 
 //void is_tie()
 
 void check_winner(vector<deque<int> >& ballots, int candidate_votes [], int& voters_cnt, int& can_cnt, string names[], ostream& out ) {
+
 	bool tie = false;
 	bool winner = false;
 	int majority_winning = voters_cnt /2;
-	
 	std::set<int> list_of_losers;
+	std::set<int> list_of_winners;
 
 	addVote ( voters_cnt, candidate_votes, ballots);
 
 	int max_vote = candidate_votes[0];
 	int min_vote = candidate_votes[0];	
+
+///*DEBUG*/  int round = 1;
 	while ( (tie== false) && (winner == false) ) {  // There is no winner or tie so far
-				
+
+///*DEBUG*/		cout << "\nround " << round;
+///*DEBUG*/	if (round ==1) cout << "\nRound " << round << " min_vote  is " << min_vote << ", majority_winning " << majority_winning << endl;				
 		for (int i = 0; i < can_cnt; i++ ) {			// looking at each candidate's vote
 			
 			if (candidate_votes[i] > majority_winning) { 		// A candidate has well over half the votes
@@ -131,11 +129,20 @@ void check_winner(vector<deque<int> >& ballots, int candidate_votes [], int& vot
 				return;
 			}
 
-			if (candidate_votes[i] > max_vote) {
+			if (candidate_votes[i] >= max_vote) {
+///*DEBUG*/		if (round ==1) cout << "\nCandidate " << i+1 << " is going in the leading bucket";
+				if (candidate_votes[i] > max_vote) {
+					list_of_winners.clear();
+				}
+				list_of_winners.insert(i);
 				max_vote = candidate_votes[i];
-			} else if (candidate_votes[i] <= min_vote  && candidate_votes[i] >=0 )  {  //negative votes count see cmt above
-				
+
+			}
+///*DEBUG*/	if (round ==1) cout << "\nCandidate " << i+1 << " has " << candidate_votes[i] << " votes"; 
+			if (candidate_votes[i] <= min_vote  && candidate_votes[i] >= 0 )  {  //negative votes count see cmt above
+///*DEBUG*/		if (round ==1) cout << "\nCandidate " << i+1 << " is going in the losing bucket";				
 				if (candidate_votes[i] < min_vote) {  		
+///*DEBUG*/			if (round ==1) cout << ",alone in there "; 
 					list_of_losers.clear();				// empty set before inserting, if the candidate has the lowest votes
 				}
 				
@@ -144,26 +151,46 @@ void check_winner(vector<deque<int> >& ballots, int candidate_votes [], int& vot
 			}
 		}
 		
-		if (min_vote == max_vote) {			// this indicates a tie
-			tie = true;
-			break;				
+		int winners_cumul_vote_cnt  = 0 ; 			// total vote received by winners
+
+		for (set<int>::iterator it = list_of_winners.begin(); it != list_of_winners.end(); it++) {
+			winners_cumul_vote_cnt += candidate_votes[(*it)] ;		
 		}
+		if (winners_cumul_vote_cnt == (unsigned) voters_cnt) {
+			tie = true;
+			break;
+		}
+
+
+
 
 		 //No tie and no clear winner, redistributin the vote of the loser
 		
 		for (set<int>::iterator it = list_of_losers.begin(); it != list_of_losers.end(); it++) {
+///*DEBUG*/	if (round ==1) cout << "candidate " << (*it)+1 << " is a loser";
+///*DEBUG*/	if (round ==1) cout << "\nhe has " << candidate_votes[(*it)] << " votes\n";
 			candidate_votes[(*it)]= -1;		//set the vote count of a losing candidate to -1 to spot a loser
 		}
-		for (int i = 0; i < voters_cnt; i++) {
-				int current_vote = ballots[i].at(0);
-				
-				while (list_of_losers.find(current_vote - 1) != list_of_losers.end()) {// if the candidate voted for is in losing set
+
+///*DEBUG*/	if (round ==1) return;
+		for (int i = 0; i < voters_cnt; i++) {		
+			int current_vote = ballots[i].at(0);
+			if (list_of_losers.find(current_vote - 1) != list_of_losers.end())	{	// if the candidate voted for is in losing set
+				while (list_of_losers.find(current_vote - 1) != list_of_losers.end()) {
 					ballots[i].pop_front();
 					current_vote = ballots[i].at(0);
 				}
 				candidate_votes[current_vote -1]++;
+			}
 		}
-		min_vote = max_vote;
+		min_vote = candidate_votes[*(list_of_winners.begin())];  // The new minimum is the nbr of vote of one winning candidate
+		list_of_losers.clear();
+///*DEBUG*/		if (round ==1)cout << "\nEnd of round " << round << ", after the ballots are reassigned, we have: \n";		
+///*DEBUG*/		if (round ==1) voting_print2d(ballots);
+///*DEBUG*/		if (round ==1) return;
+///*DEBUG*/
+
+///*DEBUG*/ round++;
 	}
 	
 	for (int i = 0; i < can_cnt ; i++) {

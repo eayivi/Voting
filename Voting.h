@@ -17,7 +17,6 @@
 #include <set>
 using namespace std;
 
-bool voting_readcount(std::istream&, int&);
 
 bool voting_read(std::istream&, int&, int&, string[], vector<deque<int> >& ballots);
 
