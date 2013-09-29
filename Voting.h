@@ -22,7 +22,6 @@ using namespace std;
 // ------------
 
 /**
-/**
  * reads two ints into i and j
  * @param r a  std::istream
  * @param i an int by reference
@@ -59,7 +58,6 @@ void voting_print2d(vector<deque<int> >& );
 // ----------------------
 
 /**
-/**
  * reads two ints into i and j
  * @param i an int
  * @param j an int by reference
@@ -72,7 +70,6 @@ void add_vote(int, int[], vector<deque<int> >& );
 // voting_check_winner
 // ----------------------
 
-/**
 /**
  * process a vector of deque and check winner
  * @param r a  vector of deque
